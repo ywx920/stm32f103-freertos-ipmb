@@ -1,0 +1,9 @@
+Output/*
+# *.d
+# *.o
+# *.so
+# *.a
+# *.exe
+# *.dll
+# *.out
+# *.crf
