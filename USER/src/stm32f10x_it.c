@@ -160,13 +160,13 @@ void TIM2_IRQHandler(void)
  */
 // void USART1_IRQHandler(void)
 // {
-//   uint8_t ch; // ½ÓÊÕÖÐ¶Ï»º³å
+//   uint8_t ch; // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï»ï¿½ï¿½ï¿½
 //   if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 //   {
 //     ch = USART_ReceiveData(USART1); // ch = USART1->DR;
-//                                     // µ÷ÓÃshell´¦ÀíÊý¾ÝµÄ½Ó¿Ú
+//                                     // ï¿½ï¿½ï¿½ï¿½shellï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ½Ó¿ï¿½
 //     shellHandler(&shell, ch);
-//     USART_ClearITPendingBit(USART1, USART_FLAG_RXNE); // Çå³ý½ÓÊÕÖÐ¶Ï±êÖ¾Î»
+//     USART_ClearITPendingBit(USART1, USART_FLAG_RXNE); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾Î»
 //   }
 // }
 
@@ -180,22 +180,23 @@ void USART3_IRQHandler(void)
   }
 }
 
-// // ´®¿ÚÖÐ¶Ï·þÎñº¯Êý
+// // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½
 // void DEBUG_USART_IRQHandler(void)
 // {
-//   uint8_t ch;  //½ÓÊÕÖÐ¶Ï»º³å
+//   uint8_t ch;  //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï»ï¿½ï¿½ï¿½
 //   if(USART_GetITStatus(USART1,USART_IT_RXNE) != RESET)
 //   {
 //     ch = USART_ReceiveData(USART1);      //ch = USART1->DR;
-//     //µ÷ÓÃshell´¦ÀíÊý¾ÝµÄ½Ó¿Ú
+//     //ï¿½ï¿½ï¿½ï¿½shellï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ½Ó¿ï¿½
 //     shellHandler(&shell, ch);
 //   }
 // }
 
-void SysTick_Handler(void)
-{
-  TimingDelay_Decrement();
-}
+/* 
+ * SysTick_Handler ç”± FreeRTOS æŽ¥ç®¡ (xPortSysTickHandler)
+ * å®šä¹‰åœ¨ FreeRTOSConfig.h ä¸­: #define xPortSysTickHandler SysTick_Handler
+ * æˆ–ç›´æŽ¥åœ¨ port.c ä¸­å®šä¹‰
+ */
 
 /**
  * @brief  This function handles PPP interrupt request.

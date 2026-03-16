@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "stm32f10x_usart.h"
+#include "queue.h"
 
 /**
  * 串口宏定义，不同的串口挂载的总线和IO不一样，移植时需要修改这几个宏
@@ -92,4 +93,8 @@ void Usart_SendHalfWord(USART_TypeDef *pUSARTx, uint16_t ch);
 void uart3_printf(const char *fmt, ...);
 void bytes_to_hexstr(uint8_t *data, uint16_t len, char *out);
 void Usart_SendByte1(USART_TypeDef *pUSARTx, uint8_t byte);
+
+/* Shell 队列相关函数 */
+QueueHandle_t xShellQueueCreate(void);
+QueueHandle_t xGetShellQueue(void);
 #endif

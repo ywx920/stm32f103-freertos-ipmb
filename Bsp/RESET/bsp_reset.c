@@ -44,7 +44,7 @@ void ResetInit(void)
 
     // 2. 配置PA系列端口
     GPIO_InitTypeDef GPIOA_InitStruct;
-    GPIOA_InitStruct.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_15;
+    GPIOA_InitStruct.GPIO_Pin =  GPIO_Pin_15;
     GPIOA_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIOA_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIOA_InitStruct);
@@ -89,13 +89,13 @@ void ResetInit(void)
     GPIO_Init(GPIOD, &GPIOD_InitStruct);
 
     GPIO_ResetBits(GPIOB, DSP_POR_MCU);
-    GPIO_ResetBits(GPIOA, A_PCIE_RSTN);
+    // GPIO_ResetBits(GPIOA, A_PCIE_RSTN);
     GPIO_ResetBits(GPIOB, A_DSP_RSTN_MCU);
     GPIO_ResetBits(GPIOA, A_PHY_RSTN);
     GPIO_SetBits(GPIOB, A_DSP_PCIESSEN_MCU);
 
-    GPIO_ResetBits(GPIOA, B_PCIE_RSTN);
-    GPIO_ResetBits(GPIOB, B_DSP_RSTN_MCU); // PB3
+    // GPIO_ResetBits(GPIOA, B_PCIE_RSTN);
+    // GPIO_ResetBits(GPIOB, B_DSP_RSTN_MCU); // PB3
     GPIO_ResetBits(GPIOC, B_PHY_RSTN);
     GPIO_SetBits(GPIOB, B_DSP_PCIESSEN_MCU);
 
@@ -113,8 +113,8 @@ void powerReset(void)
     GPIO_SetBits(GPIOB, A_DSP_RSTN_MCU); // PB1
     GPIO_SetBits(GPIOB, B_DSP_RSTN_MCU); // PB3
 
-    GPIO_SetBits(GPIOA, A_PCIE_RSTN); // TIMI0/PCIESSEN
-    GPIO_SetBits(GPIOA, B_PCIE_RSTN);
+    // GPIO_SetBits(GPIOA, A_PCIE_RSTN); // TIMI0/PCIESSEN
+    // GPIO_SetBits(GPIOA, B_PCIE_RSTN);
 
     GPIO_ResetBits(GPIOB, DSP_POR_MCU); // DSP_POR_MCU先拉低 保持复位状态
     // 控制复位时序  PG输入，EN输出
@@ -180,8 +180,8 @@ void powerOn(void)
     GPIO_SetBits(GPIOB, A_DSP_RSTN_MCU); // PB1
     GPIO_SetBits(GPIOB, B_DSP_RSTN_MCU); // PB3
 
-    GPIO_SetBits(GPIOA, A_PCIE_RSTN); // TIMI0/PCIESSEN
-    GPIO_SetBits(GPIOA, B_PCIE_RSTN);
+    // GPIO_SetBits(GPIOA, A_PCIE_RSTN); // TIMI0/PCIESSEN
+    // GPIO_SetBits(GPIOA, B_PCIE_RSTN);
 
     GPIO_ResetBits(GPIOB, DSP_POR_MCU); // DSP_POR_MCU先拉低 保持复位状态
     // 控制复位时序  PG输入，EN输出
@@ -245,8 +245,8 @@ void powerOff(void)
     /* 关机时序 */
     GPIO_ResetBits(GPIOB, A_DSP_RSTN_MCU); // PB1
     GPIO_ResetBits(GPIOB, B_DSP_RSTN_MCU); // PB3
-    GPIO_ResetBits(GPIOA, A_PCIE_RSTN);
-    GPIO_ResetBits(GPIOA, B_PCIE_RSTN);
+    // GPIO_ResetBits(GPIOA, A_PCIE_RSTN);
+    // GPIO_ResetBits(GPIOA, B_PCIE_RSTN);
 	  GPIO_ResetBits(GPIOA, A_PHY_RSTN);
     GPIO_ResetBits(GPIOC, B_PHY_RSTN);
     GPIO_ResetBits(GPIOB, DSP_POR_MCU);
@@ -271,8 +271,8 @@ void soft_reset(void)
     /* 开机时序 */
     GPIO_ResetBits(GPIOB, A_DSP_RSTN_MCU); // PB1
     GPIO_ResetBits(GPIOB, B_DSP_RSTN_MCU); // PB3
-    GPIO_ResetBits(GPIOA, A_PCIE_RSTN);
-    GPIO_ResetBits(GPIOA, B_PCIE_RSTN);
+    // GPIO_ResetBits(GPIOA, A_PCIE_RSTN);
+    // GPIO_ResetBits(GPIOA, B_PCIE_RSTN);
     GPIO_ResetBits(GPIOB, DSP_POR_MCU);
     GPIO_ResetBits(GPIOA, A_PHY_RSTN);
     GPIO_ResetBits(GPIOC, B_PHY_RSTN);
@@ -281,8 +281,8 @@ void soft_reset(void)
 
     GPIO_SetBits(GPIOB, A_DSP_RSTN_MCU);
     GPIO_SetBits(GPIOB, B_DSP_RSTN_MCU);
-    GPIO_SetBits(GPIOA, A_PCIE_RSTN);
-    GPIO_SetBits(GPIOA, B_PCIE_RSTN);
+    // GPIO_SetBits(GPIOA, A_PCIE_RSTN);
+    // GPIO_SetBits(GPIOA, B_PCIE_RSTN);
     GPIO_SetBits(GPIOB, DSP_POR_MCU);
     delay_ms(50);
 

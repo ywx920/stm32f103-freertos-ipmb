@@ -1,15 +1,9 @@
 /********************        (C) COPYRIGHT 2017        **************************
- * ÎÄ¼şÃû  £ºmain.c
- * ÃèÊö    £º»ùÓÚFreeRTOSµÄLEDµÄ²âÊÔ³ÌĞò
- * ÊµÑéÆ½Ì¨£ºSTM32F103RBT6
- * ¿â°æ±¾  £ºST3.5.0
- * ±àĞ´ÈÕÆÚ£º2015-03-30
- * ĞŞ¸ÄÈÕÆÚ£º2017-03-24
- * ×÷Õß    £º
- * 2017-03-24
- * (1)ÔËĞĞLED²âÊÔÕı³£
- * 2017-03-24
- *£¨1£©¼ÓÈëFreeRTOSµÄÖ§³Ö
+ * æ–‡ä»¶  ï¼šmain.c
+ * æè¿°  ï¼šåŸºäº FreeRTOS çš„ LED æ§åˆ¶ä¸ Shell ç»ˆç«¯ç¨‹åº
+ * å¹³å°  ï¼šSTM32F103RBT6
+ * ç‰ˆæœ¬  ï¼šST3.5.0
+ * æ—¥æœŸ  ï¼š2024
  **********************************************************************************/
 
 #include "FreeRTOS.h"
@@ -29,60 +23,45 @@
 
 float voltages[7]; // V1~V5, V7, V8
 
-void Printf_Version(void)
-{
-	printf("\r\nProject:%s%s%s%s %s\r\n", __PROJECT, __VERSION, __SOFT_NUM, __DATE__, __TIME__);
-}
-
+/**
+ * @brief ç³»ç»Ÿåˆå§‹åŒ–
+ * @param æ— 
+ * @retval æ— 
+ */
 void System_Init(void)
 {
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
-	SysTick_Init();
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    // æ³¨æ„ï¼šSysTick ç”± FreeRTOS æ¥ç®¡ï¼Œä¸éœ€è¦å•ç‹¬åˆå§‹åŒ–
+    
+    USART1_Config();
+    USART3_Config();
 
-	USART1_Config();
-	USART3_Config();
+    LED_GPIO_Config();
+    ADCx_Init();
+    ResetInit();
+    userShellInit();
 
-	LED_GPIO_Config();
-	ADCx_Init();
-	ResetInit();
-	userShellInit();
-
-	LT2991_Init();
-	GPIO_Key_Init();
-	I2C_Slave_Init(I2C1, 0xA0);
+    LT2991_Init();
+    GPIO_Key_Init();
+    I2C_Slave_Init(I2C1, 0xA0);  // ç¬¬ä¸€è·¯ I2Cï¼Œåœ°å€ 0xA0
+    I2C_Slave_Init(I2C2, 0xA2);  // ç¬¬äºŒè·¯ I2Cï¼Œåœ°å€ 0xA2ï¼ˆæˆ–å…¶ä»–åœ°å€ï¼‰
 }
 
-/*
- * º¯ÊıÃû£ºmain
- * ÃèÊö  : "Ö÷»ú"µÄÖ÷º¯Êı
- * ÊäÈë  £ºÎŞ
- * Êä³ö  : ÎŞ
+/**
+ * @brief ä¸»å‡½æ•°
+ * @param æ— 
+ * @retval æ— 
  */
-
 int main(void)
 {
-	System_Init();
-	// os_task();
-	
-	powerReset();
-	Printf_Version();
-
-
-	Usart_SendString(DEBUG_USARTx, "\r\n´®¿ÚÖĞ¶Ï½ÓÊÕ»ØÏÔ²âÊÔ\r\n");
-	printf("\r\nSTM32F103 USART1 printf OK 1 \r\n");
-	Usart_SendString(DEBUG_USART3, "\r\n´®¿ÚÖĞ¶Ï½ÓÊÕ»ØÏÔ\r\n");
-	uart3_printf("USART3 ´®¿Ú´òÓ¡²âÊÔ\r\n");
-
-	while (1)
-	{
-		LED_RUN();
-		//LT2991_ReadAll();
-		//printf("\r\n STM32F103 USART1 OK 2 \r\n");
-		//uart3_printf("USART3 TEST OK 2 \r\n");
-		//Usart_SendString(DEBUG_USART3, "\r\n´®¿ÚÖĞ¶Ï½ÓÊÕ»ØÏÔ\r\n");
-
-		// ADC_Read();
-		// GPIO_Read_Keys();
-		//delay_ms(1000);
-	}
+    System_Init();
+    
+    /* 
+     * åˆ›å»ºå¹¶å¯åŠ¨ FreeRTOS ä»»åŠ¡
+     * æ­¤å‡½æ•°ä¸ä¼šè¿”å›ï¼Œç”±è°ƒåº¦å™¨æ¥ç®¡
+     */
+    os_task();
+    
+    /* æ°¸è¿œä¸ä¼šæ‰§è¡Œåˆ°è¿™é‡Œ */
+    while (1);
 }

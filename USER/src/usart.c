@@ -16,6 +16,31 @@
 
 #include "usart.h"
 #include "shell_port.h"
+#include "queue.h"
+
+/* Shell 输入数据队列句柄 */
+static QueueHandle_t xShellQueue = NULL;
+
+/**
+ * @brief  创建 Shell 输入队列
+ * @param  无
+ * @retval 队列句柄
+ */
+QueueHandle_t xShellQueueCreate(void)
+{
+    xShellQueue = xQueueCreate(16, sizeof(uint8_t));
+    return xShellQueue;
+}
+
+/**
+ * @brief  获取 Shell 输入队列句柄
+ * @param  无
+ * @retval 队列句柄
+ */
+QueueHandle_t xGetShellQueue(void)
+{
+    return xShellQueue;
+}
 
 // 配置嵌套向量中断控制器NVIC
 static void NVIC_Configuration(void)
@@ -203,14 +228,25 @@ void USART1_IRQHandler(void)
             USART_ITConfig(USART1, USART_IT_TC, DISABLE);
         }
     }
+    
     uint8_t ch; // 接收中断缓冲
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    
     if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
     {
         ch = USART_ReceiveData(USART1); // ch = USART1->DR;
-                                        // 调用shell处理数据的接口
-        shellHandler(&shell, ch);
+        
+        // 将数据发送到队列，不在中断中处理 shell
+        if (xShellQueue != NULL)
+        {
+            xQueueSendFromISR(xShellQueue, &ch, &xHigherPriorityTaskWoken);
+        }
+        
         USART_ClearITPendingBit(USART1, USART_FLAG_RXNE); // 清除接收中断标志位
     }
+    
+    // 上下文切换
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 /****************** 发送8位的数组 ************************/
 void Usart_SendArray(USART_TypeDef *pUSARTx, uint8_t *array, uint16_t num)
